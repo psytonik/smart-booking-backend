@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
-import * as csurf from 'csurf';
+import * as cSurf from 'csurf';
 
 async function bootstrap() {
   const appOptions = { cors: true };
@@ -10,7 +10,7 @@ async function bootstrap() {
   await app.enableCors();
   await app.setGlobalPrefix('api');
   app.use(helmet());
-  app.use(csurf());
+  app.use(cSurf());
 
   const config = new DocumentBuilder()
     .setTitle('Smart Booking Backend')
