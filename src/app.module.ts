@@ -7,14 +7,14 @@ import { getMongoConfig } from './config/mongo.config';
 
 @Module({
   imports: [
-    AuthModule,
-    UsersModule,
     ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: getMongoConfig,
     }),
+    AuthModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [],
