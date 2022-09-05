@@ -10,26 +10,34 @@ type UserRole = {
   admin: 2;
 };
 
-Schema({ timestamps: true });
+@Schema({ timestamps: true })
 export class User {
   @ApiProperty()
-  @Prop({ unique: true, required: true, type: String })
+  @Prop({ unique: true, required: true })
   email: string;
 
   @ApiProperty()
-  @Prop({ required: true, type: String })
+  @Prop({ required: true })
   passwordHash: string;
 
   @ApiProperty()
-  @Prop({ unique: true, type: String })
+  @Prop({ unique: true })
   username: string;
 
   @ApiProperty()
-  @Prop({ type: Number, required: true })
+  @Prop()
+  fullName: string;
+
+  @ApiProperty()
+  @Prop({ required: true })
+  phoneNumber: string;
+
+  @ApiProperty()
+  @Prop({ required: true, type: Number })
   role: UserRole;
 
   @ApiProperty()
-  @Prop({ type: () => [String] })
+  @Prop()
   favoriteService?: string[];
 }
 

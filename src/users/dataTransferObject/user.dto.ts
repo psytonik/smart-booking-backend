@@ -15,8 +15,16 @@ export class UserDto {
   username: string;
 
   @ApiProperty()
+  @IsString()
+  fullName: string;
+
+  @ApiProperty()
+  @IsString()
+  phoneNumber: string;
+
+  @ApiProperty()
   @IsNumber()
-  role: 1 | 2 | 3;
+  role: number;
 
   @ApiProperty()
   @IsArray()
