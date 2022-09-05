@@ -24,7 +24,7 @@ export class UsersController {
 
   @HttpCode(200)
   @Get()
-  async getUsers(): Promise<any> {
+  async getUsers(): Promise<User[]> {
     return await this.userService.getUser();
   }
 }

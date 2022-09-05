@@ -18,25 +18,11 @@ export class UsersService {
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
-    await this.checkExistingEmail(userDto.email);
     const newUser = new this.usersModel(userDto);
-    return await newUser.save();
+    return newUser.save();
   }
 
   async getUser(): Promise<any> {
     return this.usersModel.find();
-  }
-
-  async checkExistingEmail(email: string) {
-    const user: User = await this.usersModel.findOne({ email }).exec();
-
-    if (user.email === email) {
-      throw new HttpException(
-        'User with this email already exists',
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
-    } else {
-      return;
-    }
   }
 }
