@@ -2,15 +2,16 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { Document } from 'mongoose';
 
-export type UserDocument = UsersModel & Document;
+export type UserDocument = User & Document;
 
 type UserRole = {
   client: 0;
   business: 1;
   admin: 2;
 };
+
 Schema({ timestamps: true });
-export class UsersModel {
+export class User {
   @ApiProperty()
   @Prop({ unique: true, required: true, type: String })
   email: string;
@@ -32,4 +33,4 @@ export class UsersModel {
   favoriteService?: string[];
 }
 
-export const UserSchema = SchemaFactory.createForClass(UsersModel);
+export const UserSchema = SchemaFactory.createForClass(User);

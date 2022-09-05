@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UserDto } from './dataTransferObject/user.dto';
-import { UsersModel } from './users.model';
+import { User } from './users.model';
 
 @Controller('users')
 export class UsersController {
@@ -17,13 +17,13 @@ export class UsersController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(201)
-  @Post('/')
-  async createUser(@Body() userDto: UserDto): Promise<UsersModel> {
+  @Post()
+  async createUser(@Body() userDto: UserDto): Promise<User> {
     return await this.userService.createUser(userDto);
   }
 
   @HttpCode(200)
-  @Get('/')
+  @Get()
   async getUsers(): Promise<any> {
     return await this.userService.getUser();
   }
