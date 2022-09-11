@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { UserDocument, User } from './users.model';
 import { Model } from 'mongoose';
 import { UserDto } from './dataTransferObject/user.dto';
+import slugify from 'slugify';
 
 @Injectable()
 export class UsersService {
@@ -12,17 +13,30 @@ export class UsersService {
   ) {}
 
   async createUser(userDto: UserDto): Promise<User> {
-    if (!userDto) {
-      throw new HttpException(
-        'Data Not Provided, Please fill all fields',
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
+    const newUser = new User();
+    Object.assign(newUser, userDto);
+    if (!newUser.favoriteService) {
+      newUser.favoriteService = [];
     }
-    const newUser = new this.usersModel(userDto);
-    return newUser.save();
+
+    newUser.slug = UsersService.getSlug(newUser.username);
+
+    const user = new this.usersModel(newUser);
+
+    return await user.save();
   }
 
-  async getUser(): Promise<any> {
-    return this.usersModel.find();
+  async getAllUsers(): Promise<User[]> {
+    return this.usersModel.find({}).catch((err) => {
+      throw new HttpException(err.message, HttpStatus.UNPROCESSABLE_ENTITY);
+    });
+  }
+
+  async getUserByName(slug: string): Promise<User> {
+    return this.usersModel.findOne({ slug }).exec();
+  }
+
+  private static getSlug(username: string): string {
+    return slugify(username, { lower: true, replacement: '_' });
   }
 }
