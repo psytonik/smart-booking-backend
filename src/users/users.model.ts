@@ -26,6 +26,10 @@ export class User {
 
   @ApiProperty()
   @Prop()
+  slug: string;
+
+  @ApiProperty()
+  @Prop()
   fullName: string;
 
   @ApiProperty()
