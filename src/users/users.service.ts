@@ -4,6 +4,7 @@ import { UserDocument, User } from './users.model';
 import { Model } from 'mongoose';
 import { UserDto } from './dataTransferObject/user.dto';
 import slugify from 'slugify';
+import { genSalt, hash } from 'bcryptjs';
 
 @Injectable()
 export class UsersService {
@@ -13,6 +14,7 @@ export class UsersService {
   ) {}
 
   async createUser(userDto: UserDto): Promise<User> {
+    const salt = await genSalt(10);
     const newUser = new User();
     Object.assign(newUser, userDto);
     if (!newUser.favoriteService) {
@@ -20,6 +22,7 @@ export class UsersService {
     }
 
     newUser.slug = UsersService.getSlug(newUser.username);
+    newUser.passwordHash = await hash(newUser.passwordHash, salt);
 
     const user = new this.usersModel(newUser);
 
