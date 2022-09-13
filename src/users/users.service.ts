@@ -35,8 +35,11 @@ export class UsersService {
     });
   }
 
-  async getUserByName(slug: string): Promise<User> {
+  async getUserBySlug(slug: string): Promise<User> {
     return this.usersModel.findOne({ slug }).exec();
+  }
+  async findUser(email: string): Promise<User> {
+    return await this.usersModel.findOne({ email }).exec();
   }
 
   private static getSlug(username: string): string {

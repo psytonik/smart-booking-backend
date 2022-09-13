@@ -17,8 +17,10 @@ export class AuthController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
+  @HttpCode(401)
   @ApiOperation({ summary: 'Sign In User' })
   @ApiResponse({ status: 200, description: 'User Successfully sign in' })
+  @ApiResponse({ status: 401, description: 'Wrong Password or Email' })
   @Post('')
   async signIn(@Body() { loginEmail, passwordHash }: AuthDto) {
     const { email } = await this.authService.validateUser(
