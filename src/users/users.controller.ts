@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -12,6 +13,7 @@ import { UsersService } from './users.service';
 import { UserDto } from './dataTransferObject/user.dto';
 import { User } from './users.model';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ALREADY_REGISTERED_ERROR } from './user.constants';
 
 @Controller('users')
 export class UsersController {
@@ -20,9 +22,15 @@ export class UsersController {
   @UsePipes(new ValidationPipe())
   @ApiOperation({ summary: 'Create New User' })
   @ApiResponse({ status: 201, description: 'User Successfully created' })
+  @ApiResponse({ status: 400, description: 'User Already Registered' })
   @HttpCode(201)
+  @HttpCode(400)
   @Post()
   async createUser(@Body() userDto: UserDto): Promise<User> {
+    const oldUser = await this.userService.findUser(userDto.email);
+    if (oldUser) {
+      throw new BadRequestException(ALREADY_REGISTERED_ERROR);
+    }
     return await this.userService.createUser(userDto);
   }
 
@@ -39,7 +47,7 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'Get user by slug Success' })
   @ApiResponse({ status: 404, description: 'User Not Found' })
   @Get('/:slug')
-  async getUserById(@Param('slug') slug: string): Promise<User> {
-    return await this.userService.getUserByName(slug);
+  async getUserBySlug(@Param('slug') slug: string): Promise<User> {
+    return await this.userService.getUserBySlug(slug);
   }
 }
