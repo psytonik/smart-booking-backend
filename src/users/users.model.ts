@@ -5,9 +5,9 @@ import { Document } from 'mongoose';
 export type UserDocument = User & Document;
 
 export enum UserRole {
-  client = 'client',
-  business = 'business',
-  admin = 'admin',
+  Client,
+  Business,
+  Admin,
 }
 
 @Schema({ timestamps: true })
@@ -38,7 +38,7 @@ export class User {
 
   @ApiProperty()
   @Prop({ required: true })
-  role: UserRole[];
+  role: UserRole;
 
   @ApiProperty()
   @Prop()
