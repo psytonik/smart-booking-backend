@@ -4,11 +4,11 @@ import { Document } from 'mongoose';
 
 export type UserDocument = User & Document;
 
-type UserRole = {
-  client: 0;
-  business: 1;
-  admin: 2;
-};
+export enum UserRole {
+  client = 'client',
+  business = 'business',
+  admin = 'admin',
+}
 
 @Schema({ timestamps: true })
 export class User {
@@ -37,8 +37,8 @@ export class User {
   phoneNumber: string;
 
   @ApiProperty()
-  @Prop({ required: true, type: Number })
-  role: UserRole;
+  @Prop({ required: true })
+  role: UserRole[];
 
   @ApiProperty()
   @Prop()
