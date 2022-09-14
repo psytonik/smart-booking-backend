@@ -48,6 +48,7 @@ export class UsersController {
   @ApiResponse({ status: 404, description: 'User Not Found' })
   @Get('/:slug')
   async getUserBySlug(@Param('slug') slug: string): Promise<User> {
+    console.log(slug);
     return await this.userService.getUserBySlug(slug);
   }
 }
