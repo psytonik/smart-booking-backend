@@ -1,4 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { UserDocument, User } from './users.model';
 import { Model } from 'mongoose';
@@ -36,7 +41,11 @@ export class UsersService {
   }
 
   async getUserBySlug(slug: string): Promise<User> {
-    return this.usersModel.findOne({ slug }).exec();
+    const user = await this.usersModel.findOne({ slug }).exec();
+    if (!user) {
+      throw new BadRequestException('User with this slug not found');
+    }
+    return user;
   }
   async findUser(email: string): Promise<User> {
     return await this.usersModel.findOne({ email }).exec();
