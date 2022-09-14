@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Get,
@@ -13,7 +12,6 @@ import { UsersService } from './users.service';
 import { UserDto } from './dataTransferObject/user.dto';
 import { User } from './users.model';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { ALREADY_REGISTERED_ERROR } from './user.constants';
 
 @Controller('users')
 export class UsersController {
@@ -27,10 +25,6 @@ export class UsersController {
   @HttpCode(400)
   @Post()
   async createUser(@Body() userDto: UserDto): Promise<User> {
-    const oldUser = await this.userService.findUser(userDto.email);
-    if (oldUser) {
-      throw new BadRequestException(ALREADY_REGISTERED_ERROR);
-    }
     return await this.userService.createUser(userDto);
   }
 

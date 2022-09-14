@@ -10,6 +10,10 @@ import { Model } from 'mongoose';
 import { UserDto } from './dataTransferObject/user.dto';
 import slugify from 'slugify';
 import { genSalt, hash } from 'bcryptjs';
+import {
+  ALREADY_REGISTERED_ERROR,
+  SLUG_NOT_FOUND_ERROR,
+} from './user.constants';
 
 @Injectable()
 export class UsersService {
@@ -19,6 +23,10 @@ export class UsersService {
   ) {}
 
   async createUser(userDto: UserDto): Promise<User> {
+    const oldUser = await this.findUser(userDto.email);
+    if (oldUser) {
+      throw new BadRequestException(ALREADY_REGISTERED_ERROR);
+    }
     const salt = await genSalt(10);
     const newUser = new User();
     Object.assign(newUser, userDto);
@@ -43,7 +51,7 @@ export class UsersService {
   async getUserBySlug(slug: string): Promise<User> {
     const user = await this.usersModel.findOne({ slug }).exec();
     if (!user) {
-      throw new BadRequestException('User with this slug not found');
+      throw new HttpException(SLUG_NOT_FOUND_ERROR, HttpStatus.NOT_FOUND);
     }
     return user;
   }
